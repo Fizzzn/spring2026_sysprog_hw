@@ -28,7 +28,7 @@ fn main() {
  //5 int
  for following_f in (f+1) ..=(f+5){
     let c0 = fahrenheit_to_celsius(following_f as f64);
-    println!("{following_f} f = {c:.2} c");
+    println!("{following_f} f = {c0:.2} c");
  }
 
 
