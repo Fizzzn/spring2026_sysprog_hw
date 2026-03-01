@@ -30,12 +30,12 @@ fn main() {
  for following_f in (f+1) ..=(f+5){
     let c0 = fahrenheit_to_celsius(following_f as f64);
   //  println!("{following_f} f = {c0:.2} c");
+
+ }
 //for word frequency
     let text = "the thing is that the thing is the thing";
     let (word, count) = most_frequent_word(text);
     println!("Most frequent word: \"{}\" ({} times)", word, count);
- }
-
 
  //Number Analyzer************************************
 
