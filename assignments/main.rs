@@ -1,4 +1,5 @@
 
+use std::io;
 const Freezing_f:f64 = 32.0;
 
 fn fahrenheit_to_celsius(f: f64) -> f64{
@@ -23,12 +24,16 @@ fn main() {
  //Temperature Converter******************************
  let mut f: i32 = 32;
  let c = fahrenheit_to_celsius(f as f64);
- println!("{f} F = {c:.2} C");
+ //println!("{f} F = {c:.2} C");
 
  //5 int
  for following_f in (f+1) ..=(f+5){
     let c0 = fahrenheit_to_celsius(following_f as f64);
-    println!("{following_f} f = {c0:.2} c");
+  //  println!("{following_f} f = {c0:.2} c");
+//for word frequency
+    let text = "the thing is that the thing is the thing";
+    let (word, count) = most_frequent_word(text);
+    println!("Most frequent word: \"{}\" ({} times)", word, count);
  }
 
 
@@ -91,24 +96,58 @@ fn main() {
 
  //Guessing Game**************************************
 
-    let secret: i32 =7;
-    let mut guess: i32 =1;
+let secret: i32 = 7;
     let mut attempts: i32 = 0;
 
-    loop{
+    loop {
+        println!("Enter your guess:");
+
+        let mut input = String::new();
+        io::stdin().read_line(&mut input).unwrap();
+
+        let guess: i32 = match input.trim().parse() {
+            Ok(num) => num,
+            Err(_) => {
+                println!("Please enter a valid number.");
+                continue;
+            }
+        };
+
         attempts += 1;
         let result = check_guess(guess, secret);
-        if guess == secret{
+
+        if result == 0 {
             println!("Correct.");
             break;
+        } else if result == 1 {
+            println!("Too high.");
+        } else {
+            println!("Too low.");
         }
-        else if guess > secret{
-            println!( "Too high.");
-        
-        }
-        else{println!("Too low.");}
-        guess += 1;
     }
 
     println!("it took like {attempts} guesses.");
+}
+//Word Frequency**************************************
+fn most_frequent_word(text: &str) -> (String, usize) {
+    let words: Vec<&str> = text.split_whitespace().collect();
+
+    let mut max_word = "";
+    let mut max_count: usize = 0;
+
+    for i in 0..words.len() {
+        let current_word = words[i];
+        let mut count: usize = 0;
+
+        for j in 0..words.len() {
+            if words[j] == current_word {
+                count += 1;
+            }
+        }
+        if count > max_count {
+            max_count = count;
+            max_word = current_word;
+        }
+    }
+    (max_word.to_string(), max_count)
 }
