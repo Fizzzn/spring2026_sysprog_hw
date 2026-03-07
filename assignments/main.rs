@@ -1,103 +1,183 @@
+use std::fs::File;
+use std::io::{self, BufRead, BufReader, Write};
 
-use std::io;
-const Freezing_f:f64 = 32.0;
+const FREEZING_F: f64 = 32.0;
 
-fn fahrenheit_to_celsius(f: f64) -> f64{
- (f - Freezing_f) * 5.0/9.0
+fn fahrenheit_to_celsius(f: f64) -> f64 {
+    (f - FREEZING_F) * 5.0 / 9.0
 }
 
-fn celsius_to_fahrenheit(c: f64) -> f64{
- c * 9.0/5.0 + Freezing_f
+fn celsius_to_fahrenheit(c: f64) -> f64 {
+    c * 9.0 / 5.0 + FREEZING_F
 }
 
-fn is_even(n: i32)-> bool{
-     n % 2 == 0
+fn is_even(n: i32) -> bool {
+    n % 2 == 0
 }
 
-fn check_guess(guess: i32, secret:i32) -> i32{
-    if guess == secret{ 0}
-    else if guess > secret{1}
-    else{-1}
+fn check_guess(guess: i32, secret: i32) -> i32 {
+    if guess == secret {
+        0
+    } else if guess > secret {
+        1
+    } else {
+        -1
+    }
+}
+
+fn most_frequent_word(text: &str) -> (String, usize) {
+    let words: Vec<&str> = text.split_whitespace().collect();
+
+    let mut max_word = "";
+    let mut max_count: usize = 0;
+
+    for i in 0..words.len() {
+        let current_word = words[i];
+        let mut count: usize = 0;
+
+        for j in 0..words.len() {
+            if words[j] == current_word {
+                count += 1;
+            }
+        }
+
+        if count > max_count {
+            max_count = count;
+            max_word = current_word;
+        }
+    }
+
+    (max_word.to_string(), max_count)
+}
+
+// book catalog
+struct Book {
+    title: String,
+    author: String,
+    year: u16,
+}
+
+fn save_books(books: &Vec<Book>, filename: &str) {
+    let mut file = File::create(filename).expect("Failed to create file");
+
+    for book in books {
+        writeln!(file, "{}|{}|{}", book.title, book.author, book.year)
+            .expect("Failed to write to file");
+    }
+}
+
+fn load_books(filename: &str) -> Vec<Book> {
+    let file = File::open(filename).expect("Failed to open file");
+    let reader = BufReader::new(file);
+
+    let mut books = Vec::new();
+
+    for line in reader.lines() {
+        let line = line.expect("Failed to read line");
+        let parts: Vec<&str> = line.split('|').collect();
+
+        if parts.len() == 3 {
+            let book = Book {
+                title: parts[0].to_string(),
+                author: parts[1].to_string(),
+                year: parts[2].parse().expect("Invalid year"),
+            };
+            books.push(book);
+        }
+    }
+
+    books
 }
 
 fn main() {
- //Temperature Converter******************************
- let mut f: i32 = 32;
- let c = fahrenheit_to_celsius(f as f64);
- //println!("{f} F = {c:.2} C");
+    // Book catalog
+    let books = vec![
+        Book {
+            title: "1984".to_string(),
+            author: "George Orwell".to_string(),
+            year: 1949,
+        },
+        Book {
+            title: "To Kill a Mockingbird".to_string(),
+            author: "Harper Lee".to_string(),
+            year: 1960,
+        },
+    ];
 
- //5 int
- for following_f in (f+1) ..=(f+5){
-    let c0 = fahrenheit_to_celsius(following_f as f64);
-  //  println!("{following_f} f = {c0:.2} c");
+    save_books(&books, "books.txt");
+    println!("Books saved to file.");
 
- }
-//for word frequency
+    let loaded_books = load_books("books.txt");
+    println!("Loaded books:");
+    for book in loaded_books {
+        println!("{} by {}, published in {}", book.title, book.author, book.year);
+    }
+
+    // Temperature converter
+    let f: i32 = 32;
+    let c = fahrenheit_to_celsius(f as f64);
+    let back_to_f = celsius_to_fahrenheit(c);
+
+    println!("\nTemperature check:");
+    println!("{f}°F = {c:.2}°C");
+    println!("{c:.2}°C = {back_to_f:.2}°F");
+
+    // Word frequency
     let text = "the thing is that the thing is the thing";
     let (word, count) = most_frequent_word(text);
-    println!("Most frequent word: \"{}\" ({} times)", word, count);
+    println!("\nMost frequent word: \"{}\" ({} times)", word, count);
 
- //Number Analyzer************************************
+    // Number analyzer
+    let num = [10, 12, 50, 43, 0, 97, 67, 69, 21, 80];
 
-//Create an array of 10 integer numbers of your choice.
-    let mut num = [10,12,50,43,00,97,67,69,21,80];
-//Implement a function is_even(n: i32) -> bool that returns true if a number is even, false otherwise.
-//done
-//Use a for loop to iterate through the array and for each number:
-    for n in num{
-        if is_even(n){
-            println!("{n} is even");
+    let mut even_count = 0;
+    let mut odd_count = 0;
+
+    for n in num {
+        if is_even(n) {
+            even_count += 1;
+        } else {
+            odd_count += 1;
         }
-        else{println!("{n} is odd")}
     }
-    for n in num{
-        if n % 3 ==0 && n%5==0{
-            println!("FizzBuzz");
-        }
-        else if n%3 ==0 {
-            println!("Fizz");
-        }
 
-        else if  n%5==0 {
-            println!("Buzz");
-        }
-        else{
-            println!("{n}");
-        }
+    println!("\nNumber analyzer:");
+    println!("Even numbers: {}", even_count);
+    println!("Odd numbers: {}", odd_count);
 
+    println!("FizzBuzz results:");
+    for n in num {
+        if n % 3 == 0 && n % 5 == 0 {
+            println!("{n} -> FizzBuzz");
+        } else if n % 3 == 0 {
+            println!("{n} -> Fizz");
+        } else if n % 5 == 0 {
+            println!("{n} -> Buzz");
+        }
     }
-//If the number is divisible by 3, print "Fizz" instead
 
-//If the number is divisible by 5, print "Buzz" instead
-
-//If it's divisible by both 3 and 5, print "FizzBuzz"
-
-//Use a while loop to find and print the sum of all numbers in the array.
     let mut i = 0;
-    let mut sum =0;
-    //imma combine both largest and sum
+    let mut sum = 0;
     let mut largest = num[0];
 
-    while i<num.len(){
+    while i < num.len() {
         sum += num[i];
 
         if num[i] > largest {
-            largest = num[i]
+            largest = num[i];
         }
-        i+=1;
+
+        i += 1;
     }
-    println!("sum: {}", sum);
-    println!("largest: {}", largest);
 
-//Use a loop to find and print the largest number in the array.
+    println!("Sum: {}", sum);
+    println!("Largest: {}", largest);
 
-
-
-
- //Guessing Game**************************************
-
-let secret: i32 = 7;
+    // Guessing game
+    let secret: i32 = 7;
     let mut attempts: i32 = 0;
+
+    println!("\nGuessing game:");
 
     loop {
         println!("Enter your guess:");
@@ -126,28 +206,5 @@ let secret: i32 = 7;
         }
     }
 
-    println!("it took like {attempts} guesses.");
-}
-//Word Frequency**************************************
-fn most_frequent_word(text: &str) -> (String, usize) {
-    let words: Vec<&str> = text.split_whitespace().collect();
-
-    let mut max_word = "";
-    let mut max_count: usize = 0;
-
-    for i in 0..words.len() {
-        let current_word = words[i];
-        let mut count: usize = 0;
-
-        for j in 0..words.len() {
-            if words[j] == current_word {
-                count += 1;
-            }
-        }
-        if count > max_count {
-            max_count = count;
-            max_word = current_word;
-        }
-    }
-    (max_word.to_string(), max_count)
+    println!("It took {} guesses.", attempts);
 }
