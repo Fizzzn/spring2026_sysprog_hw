@@ -1,8 +1,8 @@
 // use std::fs::File;
-use std::io::{self /*, BufRead, BufReader, Write */};
-use std::process::Command;
+//use std::io::{self /*, BufRead, BufReader, Write */};
+//use std::process::Command;
 
-const FREEZING_F: f64 = 32.0;
+//const FREEZING_F: f64 = 32.0;
 
 // fn fahrenheit_to_celsius(f: f64) -> f64 {
 //     (f - FREEZING_F) * 5.0 / 9.0
@@ -90,45 +90,45 @@ const FREEZING_F: f64 = 32.0;
 //     books
 // }
 
-enum FileOperation {
-    List(String),
-    Display(String),
-    Create(String, String),
-    Remove(String),
-    Pwd,
-}
+//enum FileOperation {
+ //   List(String),
+  //  Display(String),
+  //  Create(String, String),
+  //  Remove(String),
+  //  Pwd,
+//}
 
-fn perform_operation(operation: FileOperation) {
-    match operation {
-        FileOperation::List(path) => {
-            let _ = Command::new("ls").arg(path).status();
-        }
-        FileOperation::Display(path) => {
-            let _ = Command::new("cat").arg(path).status();
-        }
-        FileOperation::Create(path, content) => {
-            let command = format!("echo '{}' > {}", content, path);
-            let _ = Command::new("sh").arg("-c").arg(command).status();
-            println!("File created successfully.");
-        }
-        FileOperation::Remove(path) => {
-            let _ = Command::new("rm").arg(path).status();
-            println!("File removed successfully.");
-        }
-        FileOperation::Pwd => {
-            let _ = Command::new("pwd").status();
-        }
-    }
-}
+//fn perform_operation(operation: FileOperation) {
+ //   match operation {
+  //      FileOperation::List(path) => {
+   //         let _ = Command::new("ls").arg(path).status();
+    //    }
+     //   FileOperation::Display(path) => {
+      //      let _ = Command::new("cat").arg(path).status();
+       // }
+ //       FileOperation::Create(path, content) => {
+   //         let command = format!("echo '{}' > {}", content, path);
+     //       let _ = Command::new("sh").arg("-c").arg(command).status();
+      //      println!("File created successfully.");
+ //       }
+  //      FileOperation::Remove(path) => {
+   //         let _ = Command::new("rm").arg(path).status();
+    //        println!("File removed successfully.");
+     //   }
+      //  FileOperation::Pwd => {
+     //      let _ = Command::new("pwd").status();
+     //   }
+   // }
+//}
 
-fn get_input() -> String {
-    let mut input = String::new();
-    io::stdin().read_line(&mut input).unwrap();
-    input.trim().to_string()
-}
+//fn get_input() -> String {
+ //   let mut input = String::new();
+  //  io::stdin().read_line(&mut input).unwrap();
+   // input.trim().to_string()
+//}
 
-fn main() {
-    println!("Welcome to the File Operations Program!");
+//fn main() {
+ //   println!("Welcome to the File Operations Program!");
 
     // // Book catalog
     // let books = vec![
@@ -248,19 +248,19 @@ fn main() {
 
     // println!("It took {} guesses.", attempts);
 
-    loop {
-        println!("\nFile Operations Menu:");
-        println!("1. List files in a directory");
-        println!("2. Display file contents");
-        println!("3. Create a new file");
-        println!("4. Remove a file");
-        println!("5. Print working directory");
-        println!("0. Exit");
-        println!("Enter your choice (0-5):");
+   // loop {
+    //    println!("\nFile Operations Menu:");
+     //   println!("1. List files in a directory");
+      ///  println!("2. Display file contents");
+   //     println!("3. Create a new file");
+    //    println!("4. Remove a file");
+     //   println!("5. Print working directory");
+   ///     println!("0. Exit");
+      //  println!("Enter your choice (0-5):");
 
-        let choice = get_input();
+     //   let choice = get_input();
 
-        match choice.as_str() {
+      /*match choice.as_str() {
             "1" => {
                 println!("Enter directory path:");
                 let path = get_input();
@@ -295,4 +295,4 @@ fn main() {
             }
         }
     }
-}
+} */  
